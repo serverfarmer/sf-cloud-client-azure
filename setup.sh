@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 /opt/farm/ext/cloud-client-azure/setup-azcli.sh
 
