@@ -1,6 +1,11 @@
 #!/bin/sh
 . /opt/farm/scripts/functions.dialog
 
+if [ "$1" != "default" ]; then
+	echo "error: multiple accounts are not supported by Microsoft Azure provider"
+	exit 1
+fi
+
 if [ "`az account list |grep Enabled`" = "" ]; then
 	az login
 fi
