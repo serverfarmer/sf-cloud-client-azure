@@ -1,10 +1,16 @@
 #!/bin/sh
 . /etc/local/.cloud/azure/default.sh
 
-file=/root/.azure/sizes.$AZURE_REGION.cache
+if [ "$1" = "" ]; then
+	echo "usage: $0 <region>"
+	exit 1
+fi
 
-if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d '-4 hours' +%s` ]; then
-	az vm list-sizes -l $AZURE_REGION >$file
+region=$1
+file=/root/.azure/sizes.$region.cache
+
+if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d yesterday +%s` ]; then
+	az vm list-sizes -l $region >$file
 fi
 
 if [ "$1" = "--full" ]; then

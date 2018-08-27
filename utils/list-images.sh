@@ -1,10 +1,16 @@
 #!/bin/sh
 . /etc/local/.cloud/azure/default.sh
 
-file=/root/.azure/skus.$AZURE_REGION.$AZURE_PUBLISHER.$AZURE_OFFER.cache
+if [ "$1" = "" ]; then
+	echo "usage: $0 <region>"
+	exit 1
+fi
 
-if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d '-4 hours' +%s` ]; then
-	az vm image list-skus --publisher $AZURE_PUBLISHER --offer $AZURE_OFFER --location $AZURE_REGION >$file
+region=$1
+file=/root/.azure/skus.$region.$AZURE_PUBLISHER.$AZURE_OFFER.cache
+
+if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d yesterday +%s` ]; then
+	az vm image list-skus --publisher $AZURE_PUBLISHER --offer $AZURE_OFFER --location $region >$file
 fi
 
 if [ "$1" = "--full" ]; then

@@ -2,7 +2,7 @@
 
 file=/root/.azure/locations.cache
 
-if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d '-4 hours' +%s` ]; then
+if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d yesterday +%s` ]; then
 	az account list-locations >$file
 fi
 

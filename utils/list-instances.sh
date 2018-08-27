@@ -1,12 +1,18 @@
 #!/bin/sh
 
+if [ "$1" = "" ]; then
+	echo "usage: $0 <region>"
+	exit 1
+fi
+
+region=$1
 file=/root/.azure/instances.cache
 
 if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d '-2 minutes' +%s` ]; then
 	az vm list --show-details >$file 2>&1
 fi
 
-input=`cat $file |/opt/farm/ext/cloud-client-azure/internal/parse-instances.php`
+input=`cat $file |/opt/farm/ext/cloud-client-azure/internal/parse-instances.php |grep $region`
 
 if [ "$1" = "--fqdn" ]; then
 	echo "$input" |awk '{ print $1 }'

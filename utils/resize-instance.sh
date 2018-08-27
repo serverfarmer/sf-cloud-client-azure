@@ -1,12 +1,13 @@
 #!/bin/sh
 
-if [ "$2" = "" ]; then
-	echo "usage: $0 <instance-name> <new-instance-type>"
+if [ "$3" = "" ]; then
+	echo "usage: $0 <region> <instance-name> <new-instance-type>"
 	exit 1
 fi
 
-name=$1
-type=$2
-group=`/opt/farm/ext/cloud-client-azure/utils/get-group-name.sh`
+region=$1
+name=$2
+type=$3
+group=`/opt/farm/ext/cloud-client-azure/utils/get-group-name.sh $region`
 
 az vm resize --resource-group $group --name $name --size $type --output json

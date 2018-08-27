@@ -1,12 +1,13 @@
 #!/bin/sh
 . /etc/local/.cloud/azure/default.sh
 
-if [ "$1" = "" ]; then
-	echo "usage: $0 <ssh-key-name> [instance-type]"
+if [ "$2" = "" ]; then
+	echo "usage: $0 <region> <ssh-key-name> [instance-type]"
 	exit 1
 fi
 
-key=$1
+region=$1
+key=$2
 pubkey=/etc/local/.ssh/id_azure_$key.pub
 random=`date +%s |md5sum |head -c 4`
 alias=$key-$random
@@ -16,16 +17,16 @@ if [ ! -f $pubkey ]; then
 	exit 0
 fi
 
-group=`/opt/farm/ext/cloud-client-azure/utils/get-group-name.sh`
-/opt/farm/ext/cloud-client-azure/utils/create-group.sh $group
+group=`/opt/farm/ext/cloud-client-azure/utils/get-group-name.sh $region`
+/opt/farm/ext/cloud-client-azure/utils/create-group.sh $region $group
 
-if [ "$2" != "" ]; then
-	type=$2
+if [ "$3" != "" ]; then
+	type=$3
 else
 	type=$AZURE_DEFAULT_INSTANCE_TYPE
 fi
 
-sku=`/opt/farm/ext/cloud-client-azure/utils/get-ubuntu-image.sh`
+sku=`/opt/farm/ext/cloud-client-azure/utils/get-ubuntu-image.sh $region`
 
 az vm create \
 	--name $alias \
@@ -33,7 +34,7 @@ az vm create \
 	--resource-group $group \
 	--admin-username ubuntu \
 	--public-ip-address-dns-name $alias \
-	--location $AZURE_REGION \
+	--location $region \
 	--image $AZURE_PUBLISHER:$AZURE_OFFER:$sku:latest \
 	--ssh-key-value $pubkey \
 	--output json \

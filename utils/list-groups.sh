@@ -1,10 +1,16 @@
 #!/bin/sh
 . /etc/local/.cloud/azure/default.sh
 
-file=/root/.azure/groups.$AZURE_REGION.cache
+if [ "$1" = "" ]; then
+	echo "usage: $0 <region>"
+	exit 1
+fi
+
+region=$1
+file=/root/.azure/groups.$region.cache
 
 if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d '-4 hours' +%s` ]; then
-	az group list --query "[?location=='$AZURE_REGION']" >$file
+	az group list --query "[?location=='$region']" >$file
 fi
 
 if [ "$1" = "--full" ]; then
