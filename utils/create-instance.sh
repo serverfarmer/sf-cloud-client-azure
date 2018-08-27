@@ -25,6 +25,8 @@ else
 	type=$AZURE_DEFAULT_INSTANCE_TYPE
 fi
 
+sku=`/opt/farm/ext/cloud-client-azure/utils/get-ubuntu-image.sh`
+
 az vm create \
 	--name $alias \
 	--size $type \
@@ -32,7 +34,7 @@ az vm create \
 	--admin-username ubuntu \
 	--public-ip-address-dns-name $alias \
 	--location $AZURE_REGION \
-	--image $AZURE_PUBLISHER:$AZURE_OFFER:$AZURE_SKU:latest \
+	--image $AZURE_PUBLISHER:$AZURE_OFFER:$sku:latest \
 	--ssh-key-value $pubkey \
 	--output json \
 	2>&1 |/opt/farm/ext/cloud-client-azure/internal/parse-create.php

@@ -34,11 +34,6 @@ export AZURE_REGION=$REGION
 export AZURE_PUBLISHER=Canonical
 export AZURE_OFFER=UbuntuServer
 #
-# Ubuntu image version to use for new instances (use list-images.sh script
-# to discover all Ubuntu versions available at your configured region):
-#
-export AZURE_SKU=16.04.0-LTS
-#
 # Default instance type to use, when type isn't explicitely specified
 # (use list-instance-types.sh script to discover all instance types):
 #
