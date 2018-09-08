@@ -13,7 +13,7 @@ if [ ! -s $file ] || [ `stat -c %Y $file` -le `date -d '-4 hours' +%s` ]; then
 	az group list --query "[?location=='$region']" >$file
 fi
 
-if [ "$1" = "--full" ]; then
+if [ "$2" = "--full" ]; then
 	cat $file
 else
 	grep '"name"' $file |awk '{ print $2 }' |sed -e s/\"//g -e s/,//g |sort

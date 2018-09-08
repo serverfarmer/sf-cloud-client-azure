@@ -14,9 +14,9 @@ fi
 
 input=`cat $file |/opt/farm/ext/cloud-client-azure/internal/parse-instances.php |grep $region`
 
-if [ "$1" = "--fqdn" ]; then
+if [ "$2" = "--fqdn" ]; then
 	echo "$input" |awk '{ print $1 }'
-elif [ "$1" = "--name" ]; then
+elif [ "$2" = "--name" ]; then
 	echo "$input" |awk '{ print $1 }' |cut -d. -f1
 else
 	echo "$input"
